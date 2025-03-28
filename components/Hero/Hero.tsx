@@ -5,7 +5,7 @@ const Hero = () => {
     <section className="relative w-full min-h-screen flex items-center text-left text-white">
       {/* Imagem de fundo */}
       <div
-        className="absolute inset-0 -z-10 opacity-40 bg-cover bg-center"
+        className="absolute inset-0 -z-10 opacity-30 bg-cover bg-center"
         style={{ backgroundImage: `url(${heroImg.src})` }}
       ></div>
 
