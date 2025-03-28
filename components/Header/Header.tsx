@@ -33,11 +33,16 @@ const Header = () => {
           <a href="#contact" className="text-white hover:text-gray-300 transition">
             Contact
           </a>
+          <a href="#services" className="text-white hover:text-gray-300 transition">
+            Services
+          </a>
         </nav>
 
         {/* Botão do Menu Hambúrguer (Mobile) */}
         <button
-          className="md:hidden text-white focus:outline-none text-3xl"
+          className={`md:hidden text-white focus:outline-none text-3xl ${
+            isOpen ? "invisible" : ""
+          }`}
           onClick={() => setIsOpen(!isOpen)}
         >
           ☰
@@ -46,18 +51,21 @@ const Header = () => {
 
       {/* Menu Mobile */}
       <nav
-        className={`md:hidden fixed top-0 left-0 w-50 h-screen bg-black bg-opacity-95 flex flex-col items-center justify-center space-y-6 text-white text-xl transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`md:hidden fixed top-0 right-0 w-full h-screen bg-black bg-opacity-95 flex flex-col items-center justify-center space-y-6 text-white text-xl transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <button className="absolute top-6 right-6 text-3xl" onClick={() => setIsOpen(false)}>
+        <button className="absolute top-6 right-6 text-3xl hover:text-gray-700 transition" onClick={() => setIsOpen(false)}>
           ✖
         </button>
-        <a href="#about" className="hover:text-gray-400 transition" onClick={() => setIsOpen(false)}>
+        <a href="#about" className="hover:text-gray-700 transition" onClick={() => setIsOpen(false)}>
           About
         </a>
-        <a href="#contact" className="hover:text-gray-400 transition" onClick={() => setIsOpen(false)}>
+        <a href="#contact" className="hover:text-gray-700 transition" onClick={() => setIsOpen(false)}>
           Contact
+        </a>
+        <a href="#services" className="hover:text-gray-700 transition" onClick={() => setIsOpen(false)}>
+          Services
         </a>
       </nav>
     </header>

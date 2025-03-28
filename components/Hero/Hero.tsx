@@ -1,8 +1,8 @@
-import heroImg from "../../assets/images/aigene.jpg";
+import heroImg from "../../public/assets/images/aigene.jpg";
 
 const Hero = () => {
   return (
-    <section className="relative w-full h-screen flex items-center text-left text-white">
+    <section className="relative w-full min-h-screen flex items-center text-left text-white">
       {/* Imagem de fundo */}
       <div
         className="absolute inset-0 -z-10 opacity-40 bg-cover bg-center"

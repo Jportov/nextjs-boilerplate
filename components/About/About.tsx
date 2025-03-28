@@ -1,10 +1,10 @@
 const About = () => {
   return (
-    <section id="about" className="bg-white py-16 px-6">
+    <section id="about" className="bg-white mx-auto py-30 px-6">
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-900 mb-6">About Us</h2>
         <p className="text-lg text-gray-700 mb-6">
-          <strong>Tomelis Rig Services</strong> is company dedicated to providing expert services in maintenance and critical operations for the oil and gas industry. 
+          <strong>Tomelis Rig Services</strong> is a company dedicated to providing expert services in maintenance and critical operations for the oil and gas industry. 
           Our highly skilled team specializes in executing complex projects, ensuring safety, efficiency, and compliance 
           with the highest industry standards.
         </p>
