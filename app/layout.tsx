@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "Tomelis Rig Services",
     description:
       "Critical Rigging & Heavy Lift Solutions – Safe, precise, and proven operations for your offshore and onshore needs.",
-    url: "https://www.tomelisrig.com", // substitua pela URL real do seu site
+    url: "https://tomelisrigs.vercel.app/", // substitua pela URL real do seu site
     siteName: "Tomelis Rig Services",
     images: [
       {

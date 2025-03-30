@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       secure: false, // usa STARTTLS
       auth: {
         user: process.env.SMTP_USER, // rigservicestomelis@gmail.com
-        pass: process.env.SMTP_PASS, // Tomelisa0403
+        pass: process.env.SMTP_PASS, // senha de app gerada
       },
     });
 
@@ -38,6 +38,13 @@ Mensagem: ${message}`,
     );
   } catch (error) {
     console.error("Erro ao enviar email:", error);
+
+    // Logando erro detalhado para depuração
+    if (error instanceof Error) {
+      console.error("Detalhes do erro:", error.message);
+      console.error("Stack:", error.stack);
+    }
+
     return new Response(
       JSON.stringify({ error: "Erro ao enviar email" }),
       {
