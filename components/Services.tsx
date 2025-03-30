@@ -1,48 +1,80 @@
 'use client';
 
-import Image from "next/image";
-import "swiper/css";
-import "swiper/css/autoplay"; // Importa o CSS do autoplay
-import { Autoplay } from "swiper/modules"; // Importa o módulo de autoplay
-import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  ClipboardList,
+  Hammer,
+  LifeBuoy,
+  MoveHorizontal,
+  Users,
+  Wrench,
+} from 'lucide-react';
+
+import { motion } from 'framer-motion';
+
+const services = [
+  {
+    icon: <Hammer className="w-8 h-8 text-black" />,
+    title: 'Technical Planning',
+    description:
+      'Critical and heavy lifting operations planning, ensuring every detail is addressed with precision.',
+  },
+  {
+    icon: <MoveHorizontal className="w-8 h-8 text-black" />,
+    title: 'Confined Space Coordination',
+    description:
+      'Expert coordination of rigging operations in confined, high-risk environments without crane access.',
+  },
+  {
+    icon: <Wrench className="w-8 h-8 text-black" />,
+    title: 'Tool & Equipment Specification',
+    description:
+      'Accurate selection of the tools, lifting gear, and resources needed for each unique project.',
+  },
+  {
+    icon: <ClipboardList className="w-8 h-8 text-black" />,
+    title: 'Scope Evaluation',
+    description:
+      'Thorough technical analysis of project scopes for commercial proposals and safe execution.',
+  },
+  {
+    icon: <Users className="w-8 h-8 text-black" />,
+    title: 'Consulting for Bids',
+    description:
+      'Support for your commercial team in preparing detailed, technically viable project bids.',
+  },
+  {
+    icon: <LifeBuoy className="w-8 h-8 text-black" />,
+    title: 'Onshore & Offshore Support',
+    description:
+      'Complete assistance with logistics, planning, and execution of lifting activities at any location.',
+  },
+];
 
 const Services = () => {
-  const projects = [
-    { id: 1, title: "Projeto 1", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum", image: "/assets/images/Hero.jpg" },
-    { id: 2, title: "Projeto 2", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum", image: "/assets/images/aigene.jpg" },
-    { id: 3, title: "Projeto 3", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.", image: "/assets/images/oil-platform-6158557.jpg" },
-  ];
-
   return (
-    <section id="services" className="bg-white py-30 px-6">
-      <div className="max-w-5xl mx-auto text-center">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6">Take a look at some of our projects</h2>
-        <Swiper
-          spaceBetween={30}
-          slidesPerView={1}
-          autoplay={{
-            delay: 4000, // Tempo em milissegundos (3 segundos)
-            disableOnInteraction: true, // Continua o autoplay mesmo após interação do usuário
-          }}
-          modules={[Autoplay]} // Registra o módulo de autoplay
-          className="mt-6"
-        >
-          {projects.map((project) => (
-            <SwiperSlide key={project.id}>
-              <div className="p-4 bg-gray-100 rounded-lg shadow-md">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  width={500}
-                  height={300}
-                  className="rounded-lg mb-4 object-cover w-full h-100"
-                />
-                <h3 className="text-xl font-bold text-gray-800">{project.title}</h3>
-                <p className="text-gray-600">{project.description}</p>
+    <section id="services" className="bg-white py-20 px-6">
+      <div className="max-w-5xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-left">
+          Our Services
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div className="bg-white p-2 rounded-full shadow">{service.icon}</div>
+                <h3 className="text-xl font-semibold text-gray-800">{service.title}</h3>
               </div>
-            </SwiperSlide>
+              <p className="text-gray-700">{service.description}</p>
+            </motion.div>
           ))}
-        </Swiper>
+        </div>
       </div>
     </section>
   );

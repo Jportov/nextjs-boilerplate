@@ -1,62 +1,198 @@
 'use client';
-import { useState } from "react";
-import { FaWhatsapp } from "react-icons/fa"; // Importa o ícone do WhatsApp
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import { AnimatePresence, motion } from 'framer-motion';
+import { CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+
+type FormData = {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  message: string;
+};
+
+const schema = yup.object().shape({
+  name: yup.string().required('Name is required'),
+  company: yup.string().required('Company is required'),
+  email: yup.string().email('Invalid email').required('Email is required'),
+  phone: yup
+    .string()
+    .matches(
+      /^\+?\d[\d\s()-]{7,}$/,
+      'Phone must be a valid international number (e.g. +55 (11) 91234-5678)'
+    )
+    .required('Phone is required'),
+  message: yup.string().required('Message is required'),
+});
 
 const Contact = () => {
-  const [formStatus, setFormStatus] = useState("");
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setFormStatus("Mensagem enviada com sucesso!");
+  const [formStatus, setFormStatus] = useState('');
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setFormStatus('Email sent successfully!');
+        reset();
+      } else {
+        setFormStatus('There was an error sending the email.');
+      }
+    } catch (error) {
+      setFormStatus('There was an error sending the email.');
+    }
+  };
+
+  // 📞 Máscara leve para telefone internacional
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/[^\d+]/g, '');
+
+    // Aplica formatação básica opcional
+    value = value
+      .replace(/^(\+\d{1,3})(\d{2})(\d{4,5})(\d{0,4})$/, '$1 ($2) $3-$4')
+      .replace(/^(\+\d{1,3})(\d{2})(\d{0,5})$/, '$1 ($2) $3');
+
+    setValue('phone', value);
   };
 
   return (
-    <section id="contact" className="bg-white py-30 px-6">
-      <div className="max-w-5xl mx-auto text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6">Contact Us</h2>
+    <section id="contact" className="bg-white py-20 px-6">
+      <div className="max-w-5xl mx-auto text-left">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          Request a Technical Evaluation
+        </h2>
         <p className="text-lg text-gray-700 mb-6">
-          Get in touch with Tomelis Rig Services to discuss your requirements. Our expert team is ready to help you achieve your goals with maximum safety and efficiency in all operations.
+          Interested in learning how Tomelis can support your next project? Contact us for a free, personalized evaluation.
         </p>
-        <div className="max-w-lg md:max-w-xl lg:max-w-2xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
+
+        <div className="max-w-3xl mx-auto p-8 bg-gray-100 rounded-lg shadow-md">
+          <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-6">
+            {/* Name */}
             <div>
-              <label htmlFor="name" className="text-gray-700 font-semibold mb-2 flex">Name:</label>
-              <input type="text" id="name" placeholder="Your Name" className="p-2 border rounded w-full text-black" required />
+              <label htmlFor="name" className="text-gray-700 font-semibold mb-2 block">Name</label>
+              <input
+                id="name"
+                placeholder="Your Name"
+                {...register('name')}
+                className="p-2 border rounded w-full text-black"
+              />
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
             </div>
+
+            {/* Company */}
             <div>
-              <label htmlFor="phone" className="text-gray-700 font-semibold mb-2 flex">Phone:</label>
-              <input type="text" id="phone" placeholder="+55 (00) 00000-0000" className="p-2 border rounded w-full text-black" required />
+              <label htmlFor="company" className="text-gray-700 font-semibold mb-2 block">Company</label>
+              <input
+                id="company"
+                placeholder="Company Name"
+                {...register('company')}
+                className="p-2 border rounded w-full text-black"
+              />
+              {errors.company && <p className="text-red-500 text-sm mt-1">{errors.company.message}</p>}
             </div>
+
+            {/* Email */}
             <div>
-              <label htmlFor="company" className="text-gray-700 font-semibold mb-2 flex">Company:</label>
-              <input type="text" id="company" placeholder="Company Name" className="p-2 border rounded w-full text-black" required />
+              <label htmlFor="email" className="text-gray-700 font-semibold mb-2 block">Email</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="Your Email"
+                {...register('email')}
+                className="p-2 border rounded w-full text-black"
+              />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
+
+            {/* Phone */}
             <div>
-              <label htmlFor="email" className="text-gray-700 font-semibold mb-2 flex">Email:</label>
-              <input type="email" id="email" placeholder="Your Email" className="p-2 border rounded w-full text-black" required />
+              <label htmlFor="phone" className="text-gray-700 font-semibold mb-2 block">Phone</label>
+              <input
+                id="phone"
+                type="text"
+                placeholder="+55 (11) 91234-5678"
+                {...register('phone')}
+                onChange={handlePhoneChange}
+                value={watch('phone') || ''}
+                className="p-2 border rounded w-full text-black"
+              />
+              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
             </div>
+
+            {/* Message */}
             <div>
-              <label htmlFor="message" className="text-gray-700 font-semibold mb-2 flex">Message:</label>
-              <textarea id="message" placeholder="Your Message" className="p-2 border rounded w-full resize-none h-32 text-black" required></textarea>
+              <label htmlFor="message" className="text-gray-700 font-semibold mb-2 block">Message / Project Description</label>
+              <textarea
+                id="message"
+                {...register('message')}
+                placeholder="Your Message"
+                className="p-2 border rounded w-full resize-none h-32 text-black"
+              />
+              {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
             </div>
+
+            {/* Submit Button + Status */}
             <div className="text-center">
-              <button type="submit" className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition">
+              <button
+                type="submit"
+                className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition"
+              >
                 Send
               </button>
-              {formStatus && <p className="text-green-600 mt-4">{formStatus}</p>}
+
+              <AnimatePresence>
+                {formStatus && (
+                  <motion.div
+                    className="flex justify-center items-center gap-2 text-green-600 mt-4 text-sm font-medium"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <CheckCircle className="w-5 h-5" />
+                    {formStatus}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </form>
-          <div className="text-center mt-6">
-            <p className="text-gray-700">
-            Or contact us directly via WhatsApp:
-            </p>
+
+          {/* WhatsApp Link */}
+          <motion.p
+            className="text-gray-600 mt-6 text-sm"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            Prefer to talk directly?{' '}
             <a
-              href="https://whatsapp.com"
-              className="text-green-600 flex justify-center items-center space-x-2 mt-1 hover:text-green-500"
+              href="https://wa.me/5511999999999"
+              className="text-green-600 hover:text-green-700 font-semibold underline underline-offset-2"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <FaWhatsapp className="text-2xl" /> {/* Ícone do WhatsApp */}
-              <span>WhatsApp</span>
+              Message us on WhatsApp
             </a>
-          </div>
+          </motion.p>
         </div>
       </div>
     </section>
