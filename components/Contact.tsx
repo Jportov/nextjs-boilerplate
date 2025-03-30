@@ -121,22 +121,7 @@ const Contact = () => {
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
-
-            {/* Phone */}
-            <div>
-              <label htmlFor="phone" className="text-gray-700 font-semibold mb-2 block">Phone</label>
-              <input
-                id="phone"
-                type="text"
-                placeholder="+55 (11) 91234-5678"
-                {...register('phone')}
-                onChange={handlePhoneChange}
-                value={watch('phone') || ''}
-                className="p-2 border rounded w-full text-black"
-              />
-              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
-            </div>
-
+            
             {/* Message */}
             <div>
               <label htmlFor="message" className="text-gray-700 font-semibold mb-2 block">Message / Project Description</label>
